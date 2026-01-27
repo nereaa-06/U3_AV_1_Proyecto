@@ -11,24 +11,30 @@
     <a href="{{ route('faltas.create') }}">Registrar nueva falta</a>
     <br><br>
 
-    <table border="1" cellpadding="10" cellspacing="0">
-        <thead>
+    <h1>Informe de Guardia - Hoy: {{ $hoy }}</h1>
+
+<table border="1" cellpadding="10">
+    <thead>
+        <tr>
+            <th>Hora</th>
+            <th>Profesor Ausente</th>
+            <th>Grupo</th>
+            <th>Aula</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($huecos as $h)
             <tr>
-                <th>Profesor</th>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
+                <td>{{ $h->hora_orden }}ª</td>
+                <td>{{ $h->profesor->name }}</td>
+                <td>{{ $h->grupo->nombre }}</td>
+                <td>{{ $h->aula->nombre }}</td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach($faltas as $falta)
-                <tr>
-                    {{-- Mostramos el nombre del profesor usando la relación --}}
-                    <td>{{ $falta->profesor->name }}</td>
-                    <td>{{ $falta->fecha_inicio }}</td>
-                    <td>{{ $falta->fecha_fin }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+        @endforeach
+    </tbody>
+</table>
+
+<br>
+<a href="{{ route('faltas.index') }}">Ver historial de faltas</a>
 </body>
 </html>

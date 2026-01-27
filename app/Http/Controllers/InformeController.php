@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Falta;
+use App\Models\Horario;
+use Carbon\Carbon;
 
 class InformeController extends Controller
 {
@@ -12,7 +15,24 @@ class InformeController extends Controller
     public function index()
     {
         //
-    }
+        $hoy = Carbon::today()->toDateString(); 
+        $diaSemana = Carbon::today()->dayOfWeekIso; // 1 (Lunes) a 7 (Domingo)
+   
+        // 1. Buscamos profesores que faltan hoy
+        $ausentesIds = Falta::where('fecha_inicio', '<=', $hoy)
+                            ->where('fecha_fin', '>=', $hoy)
+                            ->pluck('user_id');
+   
+        // 2. Buscamos sus horarios para hoy
+        $huecos = Horario::with(['profesor', 'aula', 'grupo'])
+                        ->whereIn('user_id', $ausentesIds)
+                        ->where('dia_semana', $diaSemana)
+                        ->orderBy('hora_orden')
+                        ->get();
+
+         return view('informes.index', compact('huecos', 'hoy'));                
+                            
+        }
 
     /**
      * Show the form for creating a new resource.
