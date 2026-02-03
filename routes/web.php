@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FaltaController;
+use App\Http\Controllers\InformeController;
 
 Route::get('/', function () {
     return view('welcome');

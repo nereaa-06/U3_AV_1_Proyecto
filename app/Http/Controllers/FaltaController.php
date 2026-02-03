@@ -11,10 +11,20 @@ class FaltaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index( Request $request)
     {
         //
-        $faltas = Falta::with('profesor')->orderBy('fecha_inicio', 'desc')->get();
+       $query = Falta::with('profesor');
+
+    // 2. Si el usuario envía fechas de filtro, filtramos los resultados
+        if ($request->filled('desde') && $request->filled('hasta')) {
+        $query->where('fecha_inicio', '>=', $request->desde)
+              ->where('fecha_fin', '<=', $request->hasta);
+    }
+
+    // 3. Obtenemos los resultados ordenados por fecha
+    $faltas = $query->orderBy('fecha_inicio', 'desc')->get();
+
         return view('faltas.index', compact('faltas'));
     }
 
@@ -26,7 +36,6 @@ class FaltaController extends Controller
         //
         $profesores = User::all();
         return view('faltas.create', compact('profesores'));
-
     }
 
     /**
@@ -41,14 +50,9 @@ class FaltaController extends Controller
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
         ]);
 
-        Falta::create([
-            'user_id' => $request->user_id,
-            'fecha_inicio' => $request->fecha_inicio,
-            'fecha_fin' => $request->fecha_fin,
-        ]);
+        Falta::create($request->all());
 
-        return redirect()->route('faltas.create')->with('success', 'Falta registrada correctamente.');
-    }
+        return redirect()->route('faltas.index')->with('success', 'Falta registrada.');    }
 
     /**
      * Display the specified resource.

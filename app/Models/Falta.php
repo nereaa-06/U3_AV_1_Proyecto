@@ -8,12 +8,7 @@ class Falta extends Model
 {
     //
 
-    protected $fillable = [
-        'user_id',
-        'fecha_inicio',
-        'fecha_fin',
-        'observaciones',
-    ];
+    protected $fillable = ['user_id', 'fecha_inicio', 'fecha_fin'];
 
     public function profesor()
     {
