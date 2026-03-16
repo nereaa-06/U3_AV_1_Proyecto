@@ -12,41 +12,55 @@ class CentroEducativoSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        // Crear aulas 
-        $aula1 = \App\Models\Aula::create(['nombre' => 'Aula 101 - Informatica']);
-        $aula2 = \App\Models\Aula::create(['nombre' => 'Aula 102 - Matematicas']);
+        // Crear aulas
+        $aula1 = \App\Models\Aula::firstOrCreate(['nombre' => 'Aula 101 - Informatica']);
+        $aula2 = \App\Models\Aula::firstOrCreate(['nombre' => 'Aula 102 - Matematicas']);
     
         // Crear grupos
-        $grupo1 = \App\Models\Grupo::create(['nombre' => '1º DAW']);
-        $grupo2 = \App\Models\Grupo::create(['nombre' => '2º ASIR']);
+        $grupo1 = \App\Models\Grupo::firstOrCreate(['nombre' => '1º DAW']);
+        $grupo2 = \App\Models\Grupo::firstOrCreate(['nombre' => '2º ASIR']);
         
 
         // Crear usuarios (profesores)
-        $profe = \App\Models\User::create([
-        'name' => 'Profesor Ausente',
-        'email' => 'profe@centro.com',
-        'password' => bcrypt('12345678'),
+        $victor = \App\Models\User::firstOrCreate([
+            'email' => 'victor@centro.com',
+        ], [
+            'name' => 'Victor',
+            'password' => bcrypt('12345678'),
+        ]);
+
+        \App\Models\User::firstOrCreate([
+            'email' => 'manuel@centro.com',
+        ], [
+            'name' => 'Manuel',
+            'password' => bcrypt('12345678'),
+        ]);
+
+        \App\Models\User::firstOrCreate([
+            'email' => 'rafa@centro.com',
+        ], [
+            'name' => 'Rafa',
+            'password' => bcrypt('12345678'),
         ]);
 
 
         // Crear horarios
-        \App\Models\Horario::create([
-        'user_id' => $profe->id,
-        'aula_id' => $aula1->id,
-        'grupo_id' => $grupo1->id,
-        'dia_semana' => 1, 
-        'hora_orden' => 1
+        \App\Models\Horario::firstOrCreate([
+            'user_id' => $victor->id,
+            'aula_id' => $aula1->id,
+            'grupo_id' => $grupo1->id,
+            'dia_semana' => 1,
+            'hora_orden' => 1,
         ]);
 
-        \App\Models\Horario::create([
-        'user_id' => $profe->id,
-        'aula_id' => $aula2->id,
-        'grupo_id' => $grupo1->id,
-        'dia_semana' => 1,
-        'hora_orden' => 2
+        \App\Models\Horario::firstOrCreate([
+            'user_id' => $victor->id,
+            'aula_id' => $aula2->id,
+            'grupo_id' => $grupo1->id,
+            'dia_semana' => 1,
+            'hora_orden' => 2,
         ]);
-        
+
     }
 
 

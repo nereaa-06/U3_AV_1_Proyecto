@@ -44,15 +44,16 @@ class FaltaController extends Controller
     public function store(Request $request)
     {
         //
-        $request ->validate([
-        'user_id' => 'required|exists:users,id',
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
             'fecha_inicio' => 'required|date',
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
         ]);
 
-        Falta::create($request->all());
+        Falta::create($validated);
 
-        return redirect()->route('faltas.index')->with('success', 'Falta registrada.');    }
+        return redirect()->route('faltas.index')->with('success', 'Falta registrada correctamente.');
+    }
 
     /**
      * Display the specified resource.
